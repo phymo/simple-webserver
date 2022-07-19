@@ -9,7 +9,9 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    // The take method is defined in the Iterator trait and limits the iteration to the first four items at most.
+    // The ThreadPool will go out of scope at the end of main, and the drop implementation will run.
+    for stream in listener.incoming().take(4) {
         //For now, our handling of the stream consists of calling unwrap to terminate our program if the stream has any errors; if there aren’t any errors,
         let stream = stream.unwrap();
 
